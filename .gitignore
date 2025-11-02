@@ -47,7 +47,6 @@ dmypy.json
 .ruff_cache/
 
 # uv
-uv.lock
 .python-version
 
 # IDEs
