@@ -1,7 +1,7 @@
 [project]
 name = "misalign"
 version = "0.1.0"
-description = "A Python library for handling data misalignment and synchronization"
+description = "A Python library testing LLMs with prompts"
 readme = "README.md"
 authors = [
     { name = "Edward Schauman-Haigh", email = "edward@lgtmlabs.com" }
@@ -22,9 +22,9 @@ requires-python = ">=3.10"
 dependencies = []
 
 [project.urls]
-Homepage = "https://github.com/eddgineer/misalign"
-Repository = "https://github.com/eddgineer/misalign"
-Issues = "https://github.com/eddgineer/misalign/issues"
+Homepage = "https://github.com/LGTMLabs/misalign"
+Repository = "https://github.com/LGTMLabs/misalign"
+Issues = "https://github.com/LGTMLabs/misalign/issues"
 
 [project.scripts]
 misalign = "misalign.__main__:main"
