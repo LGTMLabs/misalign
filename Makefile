@@ -1,4 +1,4 @@
-.PHONY: help ci-check lint format type-check test build clean
+.PHONY: help ci-check lint format type-check test build clean version
 
 help:
 	@echo "Available targets:"
@@ -9,6 +9,7 @@ help:
 	@echo "  test        - Run pytest with coverage"
 	@echo "  build       - Build the package"
 	@echo "  clean       - Remove build artifacts"
+	@echo "  version     - Update version (usage: make version v=0.1.3)"
 
 ci-check: lint format type-check test build
 	@echo "✅ All CI checks passed!"
@@ -43,3 +44,28 @@ clean:
 	find . -type d -name .mypy_cache -exec rm -rf {} + 2>/dev/null || true
 	find . -type d -name .ruff_cache -exec rm -rf {} + 2>/dev/null || true
 	rm -rf htmlcov/ .coverage coverage.xml
+
+version:
+	@if [ -z "$(v)" ]; then \
+		echo "Error: Please specify version with v=X.Y.Z (e.g., make version v=0.1.3)"; \
+		exit 1; \
+	fi
+	@echo "Updating version to $(v)..."
+	@# Update pyproject.toml
+	@sed -i '' 's/^version = ".*"/version = "$(v)"/' pyproject.toml
+	@# Update __init__.py
+	@sed -i '' 's/__version__ = ".*"/__version__ = "$(v)"/' src/misalign/__init__.py
+	@# Update test_version.py
+	@sed -i '' 's/assert __version__ == ".*"/assert __version__ == "$(v)"/' tests/test_version.py
+	@echo "Updated version to $(v) in all files"
+	@echo "Updating lockfile..."
+	@uv lock
+	@echo "Running CI checks to verify everything works..."
+	@$(MAKE) ci-check
+	@echo "✅ Version updated to $(v) and all checks passed!"
+	@echo ""
+	@echo "Next steps:"
+	@echo "  1. Commit changes: git add -A && git commit -m 'Bump version to $(v)'"
+	@echo "  2. Create tag: git tag v$(v)"
+	@echo "  3. Push: git push && git push --tags"
+	@echo "  4. Create GitHub release with tag v$(v) to publish to PyPI"
