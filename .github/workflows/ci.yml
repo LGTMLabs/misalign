@@ -97,10 +97,13 @@ jobs:
       - name: Build package
         run: uv build
         
+      - name: Install dependencies
+        run: uv sync --locked --all-extras --dev
+        
       - name: Check build artifacts
         run: |
           ls -la dist/
-          python -m twine check --strict dist/*
+          uv run twine check --strict dist/*
         
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
